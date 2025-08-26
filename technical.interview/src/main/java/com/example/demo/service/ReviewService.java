@@ -7,9 +7,11 @@ import com.example.demo.repository.BookRepository;
 import com.example.demo.repository.ReviewRepository;
 import com.example.demo.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;

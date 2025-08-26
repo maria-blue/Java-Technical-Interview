@@ -5,6 +5,7 @@ import com.example.demo.repository.ReviewRepository;
 import com.example.demo.service.ReviewService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,7 @@ public class ReviewController {
 
     @PostMapping
     public Review createReview(@PathVariable Long bookId, @RequestParam Long userId, @RequestBody Review review) {
+        review.setCreatedAt(LocalDateTime.now());
         return reviewService.createReview(bookId, userId, review);
     }
 
