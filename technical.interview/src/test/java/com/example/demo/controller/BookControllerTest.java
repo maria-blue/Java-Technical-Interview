@@ -49,7 +49,7 @@ class BookControllerTest {
         when(bookRepository.findAll()).thenReturn(books);
 
         //Then
-        mockMvc.perform(get("/interview"))
+        mockMvc.perform(get("/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(books.size()));
     }
@@ -58,7 +58,7 @@ class BookControllerTest {
     void testGetBookById() throws Exception {
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book1));
 
-        mockMvc.perform(get("/interview/1"))
+        mockMvc.perform(get("/books/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(book1.getTitle()));
     }
@@ -67,7 +67,7 @@ class BookControllerTest {
     void testGetBookByIsbn() throws Exception {
         when(bookRepository.findByIsbn("ISBN1")).thenReturn(book1);
 
-        mockMvc.perform(get("/interview/isbn/ISBN1"))
+        mockMvc.perform(get("/books/isbn/ISBN1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(book1.getTitle()));
     }
@@ -76,7 +76,7 @@ class BookControllerTest {
     void testGetBooksByAuthor() throws Exception {
         when(bookRepository.findByAuthor(book1.getAuthor())).thenReturn(List.of(book1));
 
-        mockMvc.perform(get("/interview/author/" + book1.getAuthor()))
+        mockMvc.perform(get("/books/author/" + book1.getAuthor()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))
                 .andExpect(jsonPath("$[0].title").value(book1.getTitle()));
@@ -86,7 +86,7 @@ class BookControllerTest {
     void testGetBooksByPriceRange() throws Exception {
         when(bookRepository.findByPriceBetween(5.0, 15.0)).thenReturn(List.of(book2));
 
-        mockMvc.perform(get("/interview/price")
+        mockMvc.perform(get("/books/price")
                         .param("min", "5.0")
                         .param("max", "15.0"))
                 .andExpect(status().isOk())
@@ -98,7 +98,7 @@ class BookControllerTest {
     void testCreateBook() throws Exception {
         when(bookRepository.save(any(Book.class))).thenReturn(book1);
 
-        mockMvc.perform(post("/interview/createBook")
+        mockMvc.perform(post("/books/createBook")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(book1)))
                 .andExpect(status().isOk())
@@ -111,7 +111,7 @@ class BookControllerTest {
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book1));
         when(bookRepository.save(any(Book.class))).thenReturn(updatedBook);
 
-        mockMvc.perform(put("/interview/1")
+        mockMvc.perform(put("/books/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updatedBook)))
                 .andExpect(status().isOk())
@@ -123,7 +123,7 @@ class BookControllerTest {
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book1));
         when(bookRepository.save(any(Book.class))).thenReturn(book1);
 
-        mockMvc.perform(patch("/interview/1/title")
+        mockMvc.perform(patch("/books/1/title")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("\"Updated Title\""))
                 .andExpect(status().isOk());
@@ -134,7 +134,7 @@ class BookControllerTest {
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book1));
         when(bookRepository.save(any(Book.class))).thenReturn(book1);
 
-        mockMvc.perform(patch("/interview/1/author")
+        mockMvc.perform(patch("/books/1/author")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("\"Updated Author\""))
                 .andExpect(status().isOk());
@@ -144,7 +144,7 @@ class BookControllerTest {
     void testDeleteBook() throws Exception {
         doNothing().when(bookRepository).deleteById(1L);
 
-        mockMvc.perform(delete("/interview/1"))
+        mockMvc.perform(delete("/books/1"))
                 .andExpect(status().isOk());
     }
 
@@ -152,7 +152,7 @@ class BookControllerTest {
     void testSearchBooksByAuthor() throws Exception {
         when(bookRepository.findByAuthorContainingIgnoreCase("author")).thenReturn(List.of(book3));
 
-        mockMvc.perform(get("/interview/author/search")
+        mockMvc.perform(get("/books/author/search")
                         .param("keyword", "author"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()").value(1))

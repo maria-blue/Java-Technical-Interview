@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
-@RequestMapping("/interview")
+@RequestMapping("/books")
 public class BookController {
 
     private final BookRepository bookRepository;
