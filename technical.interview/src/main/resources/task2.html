@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Registration</title>
+</head>
+<body>
+  <h2>User Registration</h2>
+  <form id="registrationForm">
+    <label>First name: <input type="text" name="firstName" required></label><br>
+    <label>Last name: <input type="text" name="lastName" required></label><br>
+    <label>Street: <input type="text" name="street" required></label><br>
+    <label>City: <input type="text" name="city" required></label><br>
+    <label>Zip code: <input type="text" name="zipCode" required></label><br>
+    <label>E-Mail address: <input type="email" name="email" required></label><br>
+    <button type="submit">Register</button>
+  </form>
+
+  <script>
+    document.getElementById("registrationForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const jsonData = {};
+      formData.forEach((value, key) => { jsonData[key] = value });
+
+      const webhookUrl = "https://api.aiaibot.com/automation/v1/json/webhooks/339?aiaibotApiKey=92be5ad3-77c0-457a-9689-e33ab31c7365";
+
+      const response = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(jsonData)
+      });
+
+      if (response.ok) {
+        alert("Data sent successfully!");
+      } else {
+        alert("Error sending data.");
+      }
+    });
+  </script>
+</body>
+</html>
